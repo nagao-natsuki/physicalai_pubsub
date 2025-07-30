@@ -66,28 +66,22 @@ def main():
     robot_action_publisher = RobotActionPublisher()
 
     try:
-        # Move to initial position
-        #robot_action_publisher.move_to_position([0.0, 0.0, 0.0, 0.0])
-        #time.sleep(3.0)  # Wait for movement to complete
-        # Move to a different position
-        #robot_action_publisher.move_to_position([0.5, 0.3, -0.2, 0.1])
-        #time.sleep(3.0)
-        # Return to initial position
-        #robot_action_publisher.move_to_position([0.0, 0.0, 0.0, 0.0])
-        motions = [
-            [0.0, 0.0, 0.0, 0.0],
-            [0.3, -0.3, 0.2, 0.0],
-            [-0.3, 0.4, -0.2, 0.1],
-            [0.2, 0.2, 0.2, 0.2],
-            [-0.2, -0.2, -0.2, -0.2] ,
-            [0.5, 0.0, -0.5, 0.3],
-            [0.0, 0.0, 0.0, 0.0]
-	]
+        # Move to a initial position
+        robot_action_publisher.move_to_position([0.0, 0.0, 0.0, 0.0])
+        time.sleep(2.0)  # Wait for movement to complete
 
-        for i, pose in enumerate(motions):
-            robot_action_publisher.get_logger().info(f'Moving to pose {i+1}')
-            robot_action_publisher.move_to_position(pose)
-            time.sleep(3.0)  # Wait for movement to complete 
+        for i in range(1,11):
+            angle = i *2 *3.1416 #joint1
+            joint2 = 0.1 * (-1) **i
+            joint3 = 0.2 * (i % 3 -1)
+            joint4 = 0.1 * (i % 2)
+
+            robot_action_publisher.get_logger().info(f'Rotate  (joint1 = {angle:.2f})')
+            robot_action_publisher.move_to_position([angle, joint2, joint3, joint4])
+            time.sleep(1.0)
+
+        robot_action_publisher.move_to_position([0.0, 0.0, 0.0, 0.0])
+        time.sleep(2.0)  # Wait for movement to complete 
 
         robot_action_publisher.get_logger().info('All movements completed. Exiting...')
     except KeyboardInterrupt:
